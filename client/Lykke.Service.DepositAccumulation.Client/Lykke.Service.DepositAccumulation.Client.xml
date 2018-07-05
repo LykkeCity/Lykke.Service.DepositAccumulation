@@ -4,13 +4,10 @@
         <name>Lykke.Service.DepositAccumulation.Client</name>
     </assembly>
     <members>
-        <member name="M:Lykke.Service.DepositAccumulation.Client.AutofacExtension.RegisterDepositAccumulationClient(Autofac.ContainerBuilder,Lykke.Service.DepositAccumulation.Client.DepositAccumulationServiceClientSettings,System.Func{Lykke.HttpClientGenerator.HttpClientGeneratorBuilder,Lykke.HttpClientGenerator.HttpClientGeneratorBuilder})">
+        <member name="M:Lykke.Service.DepositAccumulation.Client.AutofacExtensions.RegisterClient``1(Autofac.ContainerBuilder,System.String,System.Func{Lykke.HttpClientGenerator.HttpClientGeneratorBuilder,Lykke.HttpClientGenerator.HttpClientGeneratorBuilder})">
             <summary>
-            Registers <see cref="T:Lykke.Service.DepositAccumulation.Client.IDepositAccumulationClient"/> in Autofac container using <see cref="T:Lykke.Service.DepositAccumulation.Client.DepositAccumulationServiceClientSettings"/>.
+            Registers Refit client of type IDepositAccumulationClient.
             </summary>
-            <param name="builder">Autofac container builder.</param>
-            <param name="settings">DepositAccumulation client settings.</param>
-            <param name="builderConfigure">Optional <see cref="T:Lykke.HttpClientGenerator.HttpClientGeneratorBuilder"/> configure handler.</param>
         </member>
         <member name="T:Lykke.Service.DepositAccumulation.Client.DepositAccumulationClient">
             <summary>

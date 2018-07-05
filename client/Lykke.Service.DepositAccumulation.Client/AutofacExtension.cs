@@ -6,6 +6,7 @@ using Lykke.HttpClientGenerator;
 namespace Lykke.Service.DepositAccumulation.Client
 {
     [PublicAPI]
+    /*
     public static class AutofacExtension
     {
         /// <summary>
@@ -27,6 +28,35 @@ namespace Lykke.Service.DepositAccumulation.Client
                 throw new ArgumentException("Value cannot be null or whitespace.", nameof(DepositAccumulationServiceClientSettings.ServiceUrl));
 
             builder.RegisterClient<IDepositAccumulationClient>(settings?.ServiceUrl, builderConfigure);
+        }
+    }
+    */
+
+    public static class AutofacExtensions
+    {
+        /// <summary>
+        /// Registers Refit client of type IDepositAccumulationClient.
+        /// </summary>
+        public static void RegisterClient<IDepositAccumulationClient>(
+            [NotNull] this ContainerBuilder builder,
+            [NotNull] string serviceUrl,
+            [CanBeNull] Func<HttpClientGeneratorBuilder, HttpClientGeneratorBuilder> builderConfigure = null)
+
+        {
+            if (builder == null)
+                throw new ArgumentNullException(nameof(builder));
+
+            if (string.IsNullOrWhiteSpace(serviceUrl))
+                throw new ArgumentException("Value cannot be empty.", nameof(serviceUrl));
+
+            var clientBuilder = HttpClientGenerator.HttpClientGenerator.BuildForUrl(serviceUrl);
+
+            clientBuilder = builderConfigure?.Invoke(clientBuilder) ?? clientBuilder.WithoutRetries();
+
+            builder
+                .RegisterInstance(clientBuilder.Create().Generate<DepositAccumulationClient>())
+                .As<IDepositAccumulationClient>()
+                .SingleInstance();
         }
     }
 }
