@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <AssemblyName>Lykke.Service.DepositAccumulation.AzureRepositories</AssemblyName>
+    <RootNamespace>Lykke.Service.DepositAccumulation.AzureRepositories</RootNamespace>
+    <Version>1.0.0</Version>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Lykke.AzureStorage" Version="8.6.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Lykke.Service.DepositAccumulation.Core\Lykke.Service.DepositAccumulation.Core.csproj" />
+  </ItemGroup>
+</Project>

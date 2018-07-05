@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <AssemblyName>Lykke.Service.DepositAccumulation.Services</AssemblyName>
+    <RootNamespace>Lykke.Service.DepositAccumulation.Services</RootNamespace>
+    <Version>1.0.0</Version>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Lykke.Common" Version="7.0.1" />
+    <PackageReference Include="Lykke.Service.RateCalculator.Client" Version="1.2.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Lykke.Service.DepositAccumulation.AzureRepositories\Lykke.Service.DepositAccumulation.AzureRepositories.csproj" />
+    <ProjectReference Include="..\Lykke.Service.DepositAccumulation.Core\Lykke.Service.DepositAccumulation.Core.csproj" />
+  </ItemGroup>
+</Project>
