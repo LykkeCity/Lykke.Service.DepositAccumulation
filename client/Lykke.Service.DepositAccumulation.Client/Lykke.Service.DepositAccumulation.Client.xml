@@ -4,7 +4,7 @@
         <name>Lykke.Service.DepositAccumulation.Client</name>
     </assembly>
     <members>
-        <member name="M:Lykke.Service.DepositAccumulation.Client.AutofacExtensions.RegisterDepositAccumulationClient(Autofac.ContainerBuilder,System.String,System.Func{Lykke.HttpClientGenerator.HttpClientGeneratorBuilder,Lykke.HttpClientGenerator.HttpClientGeneratorBuilder})">
+        <member name="M:Lykke.Service.DepositAccumulation.Client.AutofacExtensions.RegisterDepositAccumulationClient(Autofac.ContainerBuilder,System.String)">
             <summary>
             Registers Refit client of type IDepositAccumulationClient.
             </summary>

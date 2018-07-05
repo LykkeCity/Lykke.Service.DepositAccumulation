@@ -31,8 +31,7 @@ namespace Lykke.Service.DepositAccumulation.Controllers
             //IPaymentTransactionsRepository paymentTransactionsRepository,
             //IAccumulatedDepositRepository accumulatedDepositRepository,
             DepositAccumulationCalculationService depositAccumulationCalculationService,
-            IRateCalculatorClient rateCalculatorClient,
-            RabbitMqSubscriber<CashTransferOperation> vvv
+            IRateCalculatorClient rateCalculatorClient
             )
         {
             //_paymentTransactionsRepository = paymentTransactionsRepository;
@@ -41,9 +40,9 @@ namespace Lykke.Service.DepositAccumulation.Controllers
             _rateCalculatorClient = rateCalculatorClient;
         }
 
-        [HttpPost]
-        [Route("get")]
-        public async Task<DepositAccumulationResponse> Get([FromBody] DepositAccumulationRequest request)
+        [HttpGet]
+        [Route("get/{clientId}")]
+        public async Task<DepositAccumulationResponse> Get(string clientId)
         {
             DepositAccumulationResponse resp = new DepositAccumulationResponse();
             /*

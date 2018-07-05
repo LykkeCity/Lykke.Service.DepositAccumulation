@@ -17,7 +17,7 @@ namespace Lykke.Service.DepositAccumulation.Client
         /// </summary>
         /// <param name="clientId"></param>
         /// <returns></returns>
-        [Get("/api/depositaccumulation/{clientId}")]
+        [Get("/api/DepositAccumulation/get/{clientId}")]
         Task<AccumulatedDepositsModel> GetAccumulatedDepositsAsync(string clientId);
 
     }
