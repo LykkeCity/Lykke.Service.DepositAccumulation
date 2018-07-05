@@ -32,6 +32,7 @@ namespace Lykke.Service.DepositAccumulation.Client
     }
     */
 
+
     public static class AutofacExtensions
     {
         /// <summary>
@@ -49,12 +50,11 @@ namespace Lykke.Service.DepositAccumulation.Client
             if (string.IsNullOrWhiteSpace(serviceUrl))
                 throw new ArgumentException("Value cannot be empty.", nameof(serviceUrl));
 
-            var clientBuilder = HttpClientGenerator.HttpClientGenerator.BuildForUrl(serviceUrl);
-
-            clientBuilder = builderConfigure?.Invoke(clientBuilder) ?? clientBuilder.WithoutRetries();
-
-            builder
-                .RegisterInstance(clientBuilder.Create().Generate<DepositAccumulationClient>())
+            builder.RegisterInstance(
+                    new DepositAccumulationClient(HttpClientGenerator.HttpClientGenerator.BuildForUrl(serviceUrl)
+                        .WithoutRetries()
+                        .Create())
+                )
                 .As<IDepositAccumulationClient>()
                 .SingleInstance();
         }
