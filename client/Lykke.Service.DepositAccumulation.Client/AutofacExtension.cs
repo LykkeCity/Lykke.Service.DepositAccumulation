@@ -37,7 +37,7 @@ namespace Lykke.Service.DepositAccumulation.Client
         /// <summary>
         /// Registers Refit client of type IDepositAccumulationClient.
         /// </summary>
-        public static void RegisterClient<IDepositAccumulationClient>(
+        public static void RegisterDepositAccumulationClient(
             [NotNull] this ContainerBuilder builder,
             [NotNull] string serviceUrl,
             [CanBeNull] Func<HttpClientGeneratorBuilder, HttpClientGeneratorBuilder> builderConfigure = null)
