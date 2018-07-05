@@ -52,7 +52,8 @@ namespace Lykke.Service.DepositAccumulation.Controllers
             resp.AmountGBP = await DepositAccumulationService.Get(_paymentTransactionsRepository, _accumulatedDepositRepository, request.ClientId, "GBP");
             resp.AmountUSD = await DepositAccumulationService.Get(_paymentTransactionsRepository, _accumulatedDepositRepository, request.ClientId, "USD");
             */
-            return resp;
+
+            return await Task.FromResult(resp);
         }
 
         [HttpPost]
