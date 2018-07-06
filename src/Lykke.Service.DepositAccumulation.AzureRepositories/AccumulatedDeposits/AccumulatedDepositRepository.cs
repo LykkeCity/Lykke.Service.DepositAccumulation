@@ -1,59 +1,31 @@
 ﻿using AzureStorage;
-using AzureStorage.Tables;
-using Common.Log;
-using Lykke.Service.DepositAccumulation.Core;
 using Lykke.Service.DepositAccumulation.Core.Domain;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Lykke.Service.DepositAccumulation.AzureRepositories
 {
     public class AccumulatedDepositRepository : IAccumulatedDepositRepository
     {
-        private readonly INoSQLTableStorage<AccumulatedDepositEntity> _tableStorage;
-        private readonly INoSQLTableStorage<AccumulatedDepositPeriodEntity> _periodTableStorage;
+        private readonly INoSQLTableStorage<AccumulatedDepositPeriodEntity> _tableStorage;
 
         public AccumulatedDepositRepository(
-            INoSQLTableStorage<AccumulatedDepositEntity> tableStorage,
-            INoSQLTableStorage<AccumulatedDepositPeriodEntity> periodTableStorage,
-            ILog log
+            INoSQLTableStorage<AccumulatedDepositPeriodEntity> tableStorage
             )
         {
             _tableStorage = tableStorage;
-            _periodTableStorage = periodTableStorage;
         }
 
-        public async Task<AccumulatedDepositEntity> GetAsync(string clientId, string assetId)
+        public async Task SavePeriodAsync(AccumulatedDepositPeriodEntity period)
         {
-             return await _tableStorage.GetDataAsync(GeneratePartition(clientId), GenerateRowKey(assetId));
-        }
-
-        public async Task SavePeriodAsync(IAccumulatedDepositPeriod period)
-        {
-            var partitionKey = period.ClientId;
-            var rowKey = GeneratePeriodKey(period);
-
-            IAccumulatedDepositPeriod existingPeriod = await _periodTableStorage.GetDataAsync(partitionKey, rowKey);
+            IAccumulatedDepositPeriod existingPeriod = await _tableStorage.GetDataAsync(period.PartitionKey, period.RowKey);
             if (existingPeriod == null)
             {
-                var entity = new AccumulatedDepositPeriodEntity
-                {
-                    PartitionKey = partitionKey,
-                    RowKey = rowKey,
-
-                    ClientId = period.ClientId,
-                    AssetId = period.AssetId,
-                    Amount = period.Amount,
-                    AmountInUsd = period.AmountInUsd,
-                    StartDateTime = period.StartDateTime
-                };
-                await _periodTableStorage.InsertAsync(entity);
+                await _tableStorage.InsertAsync(period);
             }
             else
             {
-                await _periodTableStorage.MergeAsync(partitionKey, rowKey, rowData => {
+                await _tableStorage.MergeAsync(period.PartitionKey, period.RowKey, rowData => {
                     rowData.Amount = Math.Round(rowData.Amount + period.Amount, 15);
                     rowData.AmountInUsd = Math.Round(rowData.AmountInUsd + period.AmountInUsd, 15);
                     return rowData;
@@ -66,7 +38,7 @@ namespace Lykke.Service.DepositAccumulation.AzureRepositories
             var partitionKey = period.ClientId;
             var rowKey = $"__Total-{period.AssetId}__";
 
-            IAccumulatedDepositPeriod existingPeriod = await _periodTableStorage.GetDataAsync(partitionKey, rowKey);
+            IAccumulatedDepositPeriod existingPeriod = await _tableStorage.GetDataAsync(partitionKey, rowKey);
             if (existingPeriod == null)
             {
                 var entity = new AccumulatedDepositPeriodEntity
@@ -81,11 +53,11 @@ namespace Lykke.Service.DepositAccumulation.AzureRepositories
                     StartDateTime = period.StartDateTime
                 };
 
-                await _periodTableStorage.InsertAsync(entity);
+                await _tableStorage.InsertAsync(entity);
             }
             else
             {
-                await _periodTableStorage.MergeAsync(partitionKey, rowKey, rowData => {
+                await _tableStorage.MergeAsync(partitionKey, rowKey, rowData => {
                     rowData.Amount = Math.Round(rowData.Amount + period.Amount, 15);
                     rowData.AmountInUsd = Math.Round(rowData.AmountInUsd + period.AmountInUsd, 15);
                     return rowData;
@@ -98,7 +70,7 @@ namespace Lykke.Service.DepositAccumulation.AzureRepositories
             var partitionKey = period.ClientId;
             var rowKey = $"__Total__";
 
-            IAccumulatedDepositPeriod existingPeriod = await _periodTableStorage.GetDataAsync(partitionKey, rowKey);
+            IAccumulatedDepositPeriod existingPeriod = await _tableStorage.GetDataAsync(partitionKey, rowKey);
             if (existingPeriod == null)
             {
                 var entity = new AccumulatedDepositPeriodEntity
@@ -113,11 +85,11 @@ namespace Lykke.Service.DepositAccumulation.AzureRepositories
                     StartDateTime = period.StartDateTime
                 };
 
-                await _periodTableStorage.InsertAsync(entity);
+                await _tableStorage.InsertAsync(entity);
             }
             else
             {
-                await _periodTableStorage.MergeAsync(partitionKey, rowKey, rowData => {
+                await _tableStorage.MergeAsync(partitionKey, rowKey, rowData => {
                     rowData.Amount = rowData.AmountInUsd = Math.Round(rowData.AmountInUsd + period.AmountInUsd, 15);
                     return rowData;
                 });
@@ -127,18 +99,6 @@ namespace Lykke.Service.DepositAccumulation.AzureRepositories
         public string GeneratePeriodKey(IAccumulatedDepositPeriod period)
         {
             return String.Format($"1d-{{0:yyyyMMdd}}-{period.AssetId}", period.StartDateTime);
-        }
-
-        public async Task SaveAsync(string clientId, string assetId, double amount)
-        {
-            AccumulatedDepositEntity e = new AccumulatedDepositEntity();
-            e.Amount = amount;
-            e.AssetId = assetId;
-            e.ClientId = clientId;
-            e.PartitionKey = GeneratePartition(clientId);
-            e.RowKey = GenerateRowKey(assetId);
-
-            await _tableStorage.InsertOrReplaceAsync(e);
         }
 
         public string GeneratePartition(string clientId)

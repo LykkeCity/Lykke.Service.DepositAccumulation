@@ -7,6 +7,7 @@ using Lykke.RabbitMqBroker;
 using Lykke.RabbitMqBroker.Subscriber;
 using Lykke.Sdk;
 using Lykke.Service.DepositAccumulation.AzureRepositories;
+using Lykke.Service.DepositAccumulation.Controllers;
 using Lykke.Service.DepositAccumulation.Core;
 using Lykke.Service.DepositAccumulation.Message;
 using Lykke.Service.DepositAccumulation.Services;
@@ -36,17 +37,16 @@ namespace Lykke.Service.DepositAccumulation.Modules
             builder.Register(c => AzureTableStorage<ProcessedPaymentTransactionEntity>.Create(paymentTransactionsConnStr, "AccumulatedDepositsTransactions", c.Resolve<ILogFactory>()));
             builder.RegisterType<ProcessedPaymentTransactionsRepository>().As<IProcessedPaymentTransactionsRepository>();
 
-            builder.Register(c => AzureTableStorage<AccumulatedDepositEntity>.Create(paymentTransactionsConnStr, "AccumulatedDeposits", c.Resolve<ILogFactory>()));
-
             builder.Register(c => AzureTableStorage<AccumulatedDepositWaitingForProcessEntity>.Create(paymentTransactionsConnStr, "AccumulatedDepositsWaitingForProcess", c.Resolve<ILogFactory>()));
+            builder.RegisterType<AccumulatedDepositWaitingForProcessRepository>().As<IAccumulatedDepositWaitingForProcessRepository>();
 
             builder.Register(c => AzureTableStorage<AccumulatedDepositPeriodEntity>.Create(paymentTransactionsConnStr, "AccumulatedDeposits", c.Resolve<ILogFactory>()));
-
-
             builder.RegisterType<AccumulatedDepositRepository>().As<IAccumulatedDepositRepository>();
 
 
-            builder.RegisterType<DepositAccumulationCalculationService>();
+
+
+            builder.RegisterType<DepositAccumulationProcessingService>();
             builder.RegisterType<DepositAccumulationService>();
 
 
@@ -69,6 +69,10 @@ namespace Lykke.Service.DepositAccumulation.Modules
             builder.RegisterType<CashTransferMessagesHandler>().SingleInstance();
 
 
+            builder.RegisterType<WaitingDepositsController>()
+                .As<IStartable>()
+                .AutoActivate()
+                .SingleInstance();
 
         }
     }

@@ -7,5 +7,6 @@ namespace Lykke.Service.DepositAccumulation.AzureRepositories
 {
     public class AccumulatedDepositWaitingForProcessEntity : TableEntity
     {
+        public int Generation0ProcessAttempts { get; set; }
     }
 }

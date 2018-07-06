@@ -14,7 +14,7 @@ namespace Lykke.Service.DepositAccumulation.AzureRepositories
     {
         private readonly INoSQLTableStorage<ProcessedPaymentTransactionEntity> _tableStorage;
 
-        public ProcessedPaymentTransactionsRepository(INoSQLTableStorage<ProcessedPaymentTransactionEntity> tableStorage, ILog log)
+        public ProcessedPaymentTransactionsRepository(INoSQLTableStorage<ProcessedPaymentTransactionEntity> tableStorage)
         {
             _tableStorage = tableStorage;
         }

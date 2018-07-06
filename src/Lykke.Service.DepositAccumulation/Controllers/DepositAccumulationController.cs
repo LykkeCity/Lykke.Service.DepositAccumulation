@@ -5,7 +5,6 @@ using Lykke.Service.DepositAccumulation.AzureRepositories;
 using Lykke.Service.DepositAccumulation.Client.Models;
 using Lykke.Service.DepositAccumulation.Core;
 using Lykke.Service.DepositAccumulation.Services;
-using Lykke.Service.RateCalculator.Client;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -21,23 +20,13 @@ namespace Lykke.Service.DepositAccumulation.Controllers
 
     public class DepositAccumulationController
     {
-        //private readonly IPaymentTransactionsRepository _paymentTransactionsRepository;
-        private readonly IAccumulatedDepositRepository _accumulatedDepositRepository;
         private readonly DepositAccumulationService _depositAccumulationService;
-        //private readonly IRateCalculatorClient _rateCalculatorClient;
-        //private readonly ILog _log;
 
         public DepositAccumulationController(
-            //IPaymentTransactionsRepository paymentTransactionsRepository,
-            //IAccumulatedDepositRepository accumulatedDepositRepository,
             DepositAccumulationService depositAccumulationService
-            //IRateCalculatorClient rateCalculatorClient
             )
         {
-            //_paymentTransactionsRepository = paymentTransactionsRepository;
-            //_accumulatedDepositRepository = accumulatedDepositRepository;
             _depositAccumulationService = depositAccumulationService;
-            //_rateCalculatorClient = rateCalculatorClient;
         }
 
         [HttpGet]
@@ -46,17 +35,6 @@ namespace Lykke.Service.DepositAccumulation.Controllers
         {
             return await _depositAccumulationService.GetAccumulatedDepositsForUI(clientId);
         }
-
-        /*
-        [HttpPost]
-        [Route("calculate/{clientId}")]
-        public async Task Calculate(string clientId)
-        {
-            await Task.CompletedTask;
-        }
-        */
-
-
 
     }
 

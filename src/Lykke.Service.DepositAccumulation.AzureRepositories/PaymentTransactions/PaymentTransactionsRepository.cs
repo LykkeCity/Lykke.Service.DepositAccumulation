@@ -15,11 +15,12 @@ namespace Lykke.Service.DepositAccumulation.AzureRepositories
         public static readonly string NotifyProcessedStatus = "NotifyProcessed";
         private readonly INoSQLTableStorage<PaymentTransactionEntity> _tableStorage;
 
-        public PaymentTransactionsRepository(INoSQLTableStorage<PaymentTransactionEntity> tableStorage, ILog log)
+        public PaymentTransactionsRepository(INoSQLTableStorage<PaymentTransactionEntity> tableStorage)
         {
             _tableStorage = tableStorage;
         }
 
+        /*
         public async Task<double> SumAllAsync(string clientId, string assetId)
         {
             var allPaymentTransactions = await _tableStorage.GetDataAsync(GeneratePartition(clientId), _ => _.AssetId == assetId);
@@ -36,6 +37,7 @@ namespace Lykke.Service.DepositAccumulation.AzureRepositories
             }
             return result;
         }
+        */
 
         private Func<PaymentTransactionEntity, bool> FiatPredicate = (PaymentTransactionEntity t) => (t.AssetId == "CHF" || t.AssetId == "USD" || t.AssetId == "EUR" || t.AssetId == "GBP") && t.Status == NotifyProcessedStatus;
 

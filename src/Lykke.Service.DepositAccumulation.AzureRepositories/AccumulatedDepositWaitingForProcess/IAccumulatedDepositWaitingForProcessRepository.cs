@@ -9,11 +9,16 @@ namespace Lykke.Service.DepositAccumulation.AzureRepositories
 {
     public interface IAccumulatedDepositWaitingForProcessRepository
     {
-        Task<IEnumerable<AccumulatedDepositWaitingForProcessEntity>> GetWaitingForProcessAsync(string clientId);
+        Task<IEnumerable<AccumulatedDepositWaitingForProcessEntity>> GetWaitingForProcessAsync(int generation);
 
-        Task SaveWaitingForProcessAsync(string clientId, string transactionId);
+        Task SaveWaitingForProcessAsync(string clientId, string transactionId, int generation);
+
+        Task IncrementProcessingAttempt(AccumulatedDepositWaitingForProcessEntity entity);
 
         Task DeleteWaitingForProcessAsync(string clientId, string transactionId);
+
+        Task MoveToNextGeneration(AccumulatedDepositWaitingForProcessEntity entity);
+        
 
     }
 }

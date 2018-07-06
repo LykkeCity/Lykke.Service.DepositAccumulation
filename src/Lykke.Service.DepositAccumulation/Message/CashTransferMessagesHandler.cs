@@ -22,24 +22,15 @@ namespace Lykke.Service.DepositAccumulation.Message
 
         public CashTransferMessagesHandler(
             RabbitMqSubscriptionSettings rmqSettings,
-            //IAccumulatedDepositWaitingForProcessRepository accumulatedDepositWaitingForProcessRepository,
+            IAccumulatedDepositWaitingForProcessRepository accumulatedDepositWaitingForProcessRepository,
             ILogFactory log)
         {
             _rmqSettings = rmqSettings;
-            //_accumulatedDepositWaitingForProcessRepository = accumulatedDepositWaitingForProcessRepository;
+            _accumulatedDepositWaitingForProcessRepository = accumulatedDepositWaitingForProcessRepository;
             _log = log;
-            
-            /*
-            _subscriber = subscriber;
-            _subscriber.SetMessageDeserializer(new JsonMessageDeserializer<CashTransferOperation>())
-                .SetMessageReadStrategy(new MessageReadWithTemporaryQueueStrategy())
-                .Subscribe(HandleMessage)
-                .SetLogger(log);
-                */
-
         }
 
-        public async Task StartAsync()
+        public void Start()
         {
             try
             {
@@ -52,32 +43,22 @@ namespace Lykke.Service.DepositAccumulation.Message
             }
             catch (Exception ex)
             {
-                //_log.WriteErrorAsync(nameof(CashInOutQueue), nameof(Start), null, ex).Wait();
-                throw;
+                _log.CreateLog(this).Error(ex, nameof(CashTransferMessagesHandler), nameof(Start));
             }
-
-
-            await Task.CompletedTask;
         }
 
-        private async Task<bool> HandleMessage(CashTransferOperation item)
+        private async Task HandleMessage(CashTransferOperation item)
         {
             try
             {
-                //await _accumulatedDepositWaitingForProcessRepository.SaveWaitingForProcessAsync(item.ClientId, item.Id);
-
-                return await Task.FromResult(true);
+                if (item.Asset == "CHF" || item.Asset == "USD" || item.Asset == "EUR" || item.Asset == "GBP")
+                {
+                    await _accumulatedDepositWaitingForProcessRepository.SaveWaitingForProcessAsync(item.ClientId, item.Id, 0);
+                }
             }
-            catch (Exception exc)
+            catch (Exception ex)
             {
-                await _log.CreateLog(this).WriteErrorAsync(
-                    nameof(DepositAccumulation),
-                    nameof(CashTransferMessagesHandler),
-                    nameof(HandleMessage),
-                    exc.GetBaseException(),
-                    DateTime.UtcNow);
-
-                return await Task.FromResult(false);
+                _log.CreateLog(this).Error(ex, nameof(CashTransferMessagesHandler), nameof(HandleMessage));
             }
         }
 

@@ -56,30 +56,12 @@ namespace Lykke.Service.DepositAccumulation
         }
 
         [UsedImplicitly]
-        public async void Configure(IApplicationBuilder app, CashTransferMessagesHandler mh, IApplicationLifetime appLifetime)
+        public void Configure(IApplicationBuilder app, CashTransferMessagesHandler mh, IApplicationLifetime appLifetime)
         {
             app.UseLykkeConfiguration();
 
-
-            await mh.StartAsync();
+            mh.Start();
         }
-
-        private async Task StartApplication()
-        {
-            try
-            {
-                //StartSubscribers();
-
-                await ApplicationContainer.Resolve<IStartupManager>().StartAsync();
-                //await Log.WriteMonitorAsync("", Program.EnvInfo, "Started");
-            }
-            catch (Exception ex)
-            {
-                //await Log.WriteFatalErrorAsync(nameof(Startup), nameof(StartApplication), "", ex);
-                throw;
-            }
-        }
-
 
 
     }
