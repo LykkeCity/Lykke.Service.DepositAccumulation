@@ -1,4 +1,5 @@
-﻿using System;
+﻿/*
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -9,3 +10,4 @@ namespace Lykke.Service.DepositAccumulation.Models
         public string ClientId { get; set; }
     }
 }
+*/

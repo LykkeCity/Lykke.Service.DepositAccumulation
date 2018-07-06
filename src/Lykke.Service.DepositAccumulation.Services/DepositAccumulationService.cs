@@ -1,4 +1,5 @@
 ﻿using Lykke.Service.DepositAccumulation.AzureRepositories;
+using Lykke.Service.DepositAccumulation.Client.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,6 +9,24 @@ namespace Lykke.Service.DepositAccumulation.Services
 {
     public class DepositAccumulationService
     {
+        private readonly IAccumulatedDepositRepository _accumulatedDepositRepository;
+
+        public DepositAccumulationService(
+            IAccumulatedDepositRepository accumulatedDepositRepository
+            )
+        {
+            _accumulatedDepositRepository = accumulatedDepositRepository;
+        }
+
+        public async Task<AccumulatedDepositsModel> GetAccumulatedDepositsForUI(string clientId)
+        {
+            AccumulatedDepositsModel resp = new AccumulatedDepositsModel();
+            resp.AmountTotal = await _accumulatedDepositRepository.GetForAllTimeAsync(clientId);
+            return resp;
+        }
+
+
+        /*
         public static async Task<double> AccumulateDepositsAndAddAmount(
             IPaymentTransactionsRepository paymentTransactionsRepository,
             IAccumulatedDepositRepository accumulatedDepositRepository,
@@ -53,6 +72,7 @@ namespace Lykke.Service.DepositAccumulation.Services
             }
 
         }
+        */
 
     }
 }

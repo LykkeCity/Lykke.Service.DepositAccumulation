@@ -10,6 +10,7 @@
     <PackageReference Include="Lykke.Service.RateCalculator.Client" Version="1.2.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\client\Lykke.Service.DepositAccumulation.Client\Lykke.Service.DepositAccumulation.Client.csproj" />
     <ProjectReference Include="..\Lykke.Service.DepositAccumulation.AzureRepositories\Lykke.Service.DepositAccumulation.AzureRepositories.csproj" />
     <ProjectReference Include="..\Lykke.Service.DepositAccumulation.Core\Lykke.Service.DepositAccumulation.Core.csproj" />
   </ItemGroup>

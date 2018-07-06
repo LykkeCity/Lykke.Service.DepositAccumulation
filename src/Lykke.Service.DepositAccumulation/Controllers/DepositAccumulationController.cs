@@ -2,8 +2,8 @@
 using Lykke.RabbitMqBroker;
 using Lykke.RabbitMqBroker.Subscriber;
 using Lykke.Service.DepositAccumulation.AzureRepositories;
+using Lykke.Service.DepositAccumulation.Client.Models;
 using Lykke.Service.DepositAccumulation.Core;
-using Lykke.Service.DepositAccumulation.Models;
 using Lykke.Service.DepositAccumulation.Services;
 using Lykke.Service.RateCalculator.Client;
 using Microsoft.AspNetCore.Authorization;
@@ -22,45 +22,41 @@ namespace Lykke.Service.DepositAccumulation.Controllers
     public class DepositAccumulationController
     {
         //private readonly IPaymentTransactionsRepository _paymentTransactionsRepository;
-        //private readonly IAccumulatedDepositRepository _accumulatedDepositRepository;
-        private readonly DepositAccumulationCalculationService _depositAccumulationCalculationService;
-        private readonly IRateCalculatorClient _rateCalculatorClient;
+        private readonly IAccumulatedDepositRepository _accumulatedDepositRepository;
+        private readonly DepositAccumulationService _depositAccumulationService;
+        //private readonly IRateCalculatorClient _rateCalculatorClient;
         //private readonly ILog _log;
 
         public DepositAccumulationController(
             //IPaymentTransactionsRepository paymentTransactionsRepository,
             //IAccumulatedDepositRepository accumulatedDepositRepository,
-            DepositAccumulationCalculationService depositAccumulationCalculationService,
-            IRateCalculatorClient rateCalculatorClient
+            DepositAccumulationService depositAccumulationService
+            //IRateCalculatorClient rateCalculatorClient
             )
         {
             //_paymentTransactionsRepository = paymentTransactionsRepository;
             //_accumulatedDepositRepository = accumulatedDepositRepository;
-            _depositAccumulationCalculationService = depositAccumulationCalculationService;
-            _rateCalculatorClient = rateCalculatorClient;
+            _depositAccumulationService = depositAccumulationService;
+            //_rateCalculatorClient = rateCalculatorClient;
         }
 
         [HttpGet]
         [Route("get/{clientId}")]
-        public async Task<DepositAccumulationResponse> Get(string clientId)
+        public async Task<AccumulatedDepositsModel> Get(string clientId)
         {
-            DepositAccumulationResponse resp = new DepositAccumulationResponse();
-            /*
-            resp.AmountCHF = await DepositAccumulationService.Get(_paymentTransactionsRepository, _accumulatedDepositRepository, request.ClientId, "CHF");
-            resp.AmountEUR = await DepositAccumulationService.Get(_paymentTransactionsRepository, _accumulatedDepositRepository, request.ClientId, "EUR");
-            resp.AmountGBP = await DepositAccumulationService.Get(_paymentTransactionsRepository, _accumulatedDepositRepository, request.ClientId, "GBP");
-            resp.AmountUSD = await DepositAccumulationService.Get(_paymentTransactionsRepository, _accumulatedDepositRepository, request.ClientId, "USD");
-            */
-
-            return await Task.FromResult(resp);
+            return await _depositAccumulationService.GetAccumulatedDepositsForUI(clientId);
         }
 
+        /*
         [HttpPost]
         [Route("calculate/{clientId}")]
         public async Task Calculate(string clientId)
         {
             await Task.CompletedTask;
         }
+        */
+
+
 
     }
 

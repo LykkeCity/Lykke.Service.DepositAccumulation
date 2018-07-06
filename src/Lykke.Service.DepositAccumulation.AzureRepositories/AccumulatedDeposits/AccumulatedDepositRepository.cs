@@ -150,6 +150,20 @@ namespace Lykke.Service.DepositAccumulation.AzureRepositories
             return assetId;
         }
 
+        public async Task<double> GetForDayAsync(string clientId, DateTime dt)
+        {
+            var rowKey = String.Format($"1d-{{0:yyyyMMdd}}", dt);
+            var entity = await _tableStorage.GetDataAsync(clientId, rowKey);
+            return entity == null ? 0 : entity.Amount;
+        }
+
+        public async Task<double> GetForAllTimeAsync(string clientId)
+        {
+            var entity = await _tableStorage.GetDataAsync(clientId, "AllTime");
+            return entity == null ? 0 : entity.Amount;
+        }
+
+
 
     }
 }

@@ -45,12 +45,14 @@ namespace Lykke.Service.DepositAccumulation.Modules
 
             builder.RegisterType<AccumulatedDepositRepository>().As<IAccumulatedDepositRepository>();
 
+
             builder.RegisterType<DepositAccumulationCalculationService>();
-            builder.RegisterType<DepositAccumulationPeriodService>();
+            builder.RegisterType<DepositAccumulationService>();
 
 
 
             builder.RegisterRateCalculatorClient(_appSettings.CurrentValue.RateCalculatorServiceClient.ServiceUrl);
+
 
 
             var rabbitMq = _appSettings.CurrentValue.RabbitMq;

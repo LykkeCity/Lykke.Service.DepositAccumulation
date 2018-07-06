@@ -1,4 +1,5 @@
 ﻿using Lykke.Service.DepositAccumulation.AzureRepositories;
+using Lykke.Service.DepositAccumulation.Client.Models;
 using Lykke.Service.DepositAccumulation.Core.Domain;
 using Lykke.Service.RateCalculator.Client;
 using Newtonsoft.Json;
@@ -13,26 +14,14 @@ namespace Lykke.Service.DepositAccumulation.Services
 {
     public class DepositAccumulationCalculationService
     {
-        //private readonly DepositAccumulationPeriodService _depositAccumulationPeriodService;
-        //private readonly IPaymentTransactionsRepository _paymentTransactionsRepository;
-        //private readonly IProcessedPaymentTransactionsRepository _processedPaymentTransactionsRepository;
-        //private readonly IAccumulatedDepositRepository _accumulatedDepositRepository;
-        //private readonly IRateCalculatorClient _rateCalculatorClient;
+        private readonly IAccumulatedDepositRepository _accumulatedDepositRepository;
 
 
         public DepositAccumulationCalculationService(
-            //DepositAccumulationPeriodService depositAccumulationPeriodService,
-            //IPaymentTransactionsRepository paymentTransactionsRepository,
-            //IProcessedPaymentTransactionsRepository processedPaymentTransactionsRepository,
-            //IAccumulatedDepositRepository accumulatedDepositRepository,
-            //IRateCalculatorClient rateCalculatorClient
+            IAccumulatedDepositRepository accumulatedDepositRepository
             )
         {
-            //_depositAccumulationPeriodService = depositAccumulationPeriodService;
-            //_paymentTransactionsRepository = paymentTransactionsRepository;
-            //_processedPaymentTransactionsRepository = processedPaymentTransactionsRepository;
-            //_accumulatedDepositRepository = accumulatedDepositRepository;
-            //_rateCalculatorClient = rateCalculatorClient;
+            _accumulatedDepositRepository = accumulatedDepositRepository;
         }
 
 
