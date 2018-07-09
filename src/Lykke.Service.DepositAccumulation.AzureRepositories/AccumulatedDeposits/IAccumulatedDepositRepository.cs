@@ -15,9 +15,6 @@ namespace Lykke.Service.DepositAccumulation.AzureRepositories
 
         Task SavePeriodAsync(AccumulatedDepositPeriodEntity period);
 
-        Task SaveAssetTotalAsync(IAccumulatedDepositPeriod period);
-
-        Task SaveTotalAsync(IAccumulatedDepositPeriod period);
 
     }
 }

@@ -135,8 +135,6 @@ namespace Lykke.Service.DepositAccumulation.Services
                     RowKey = rowKey,
 
                     ClientId = clientId,
-                    AssetId = "USD",
-                    Amount = amount,
                     AmountInUsd = amountInUsd,
                     StartDateTime = startDateTime
                 };
@@ -152,8 +150,6 @@ namespace Lykke.Service.DepositAccumulation.Services
                     RowKey = rowKey,
 
                     ClientId = clientId,
-                    AssetId = "USD",
-                    Amount = amount,
                     AmountInUsd = amountInUsd,
                     StartDateTime = startDateTime
                 };

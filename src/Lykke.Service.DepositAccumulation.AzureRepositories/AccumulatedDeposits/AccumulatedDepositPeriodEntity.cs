@@ -12,7 +12,7 @@ namespace Lykke.Service.DepositAccumulation.AzureRepositories
         
         public string ClientId { get; set; }
         public string AssetId { get; set; }
-        public double Amount { get; set; }
+        public double? Amount { get; set; }
         public double AmountInUsd { get; set; }
 
     }

@@ -25,76 +25,26 @@ namespace Lykke.Service.DepositAccumulation.AzureRepositories
             }
             else
             {
-                await _tableStorage.MergeAsync(period.PartitionKey, period.RowKey, rowData => {
-                    rowData.Amount = Math.Round(rowData.Amount + period.Amount, 15);
-                    rowData.AmountInUsd = Math.Round(rowData.AmountInUsd + period.AmountInUsd, 15);
-                    return rowData;
-                });
-            }
-        }
-
-        public async Task SaveAssetTotalAsync(IAccumulatedDepositPeriod period)
-        {
-            var partitionKey = period.ClientId;
-            var rowKey = $"__Total-{period.AssetId}__";
-
-            IAccumulatedDepositPeriod existingPeriod = await _tableStorage.GetDataAsync(partitionKey, rowKey);
-            if (existingPeriod == null)
-            {
-                var entity = new AccumulatedDepositPeriodEntity
+                if (period.Amount != null)
                 {
-                    PartitionKey = partitionKey,
-                    RowKey = rowKey,
-
-                    ClientId = period.ClientId,
-                    AssetId = period.AssetId,
-                    Amount = period.Amount,
-                    AmountInUsd = period.AmountInUsd,
-                    StartDateTime = period.StartDateTime
-                };
-
-                await _tableStorage.InsertAsync(entity);
-            }
-            else
-            {
-                await _tableStorage.MergeAsync(partitionKey, rowKey, rowData => {
-                    rowData.Amount = Math.Round(rowData.Amount + period.Amount, 15);
-                    rowData.AmountInUsd = Math.Round(rowData.AmountInUsd + period.AmountInUsd, 15);
-                    return rowData;
-                });
-            }
-        }
-
-        public async Task SaveTotalAsync(IAccumulatedDepositPeriod period)
-        {
-            var partitionKey = period.ClientId;
-            var rowKey = $"__Total__";
-
-            IAccumulatedDepositPeriod existingPeriod = await _tableStorage.GetDataAsync(partitionKey, rowKey);
-            if (existingPeriod == null)
-            {
-                var entity = new AccumulatedDepositPeriodEntity
+                    await _tableStorage.MergeAsync(period.PartitionKey, period.RowKey, rowData =>
+                    {
+                        rowData.Amount = Math.Round(rowData.Amount ?? 0 + period.Amount ?? 0, 15);
+                        rowData.AmountInUsd = Math.Round(rowData.AmountInUsd + period.AmountInUsd, 15);
+                        return rowData;
+                    });
+                }
+                else
                 {
-                    PartitionKey = partitionKey,
-                    RowKey = rowKey,
-
-                    ClientId = period.ClientId,
-                    AssetId = "USD",
-                    Amount = period.AmountInUsd,
-                    AmountInUsd = period.AmountInUsd,
-                    StartDateTime = period.StartDateTime
-                };
-
-                await _tableStorage.InsertAsync(entity);
-            }
-            else
-            {
-                await _tableStorage.MergeAsync(partitionKey, rowKey, rowData => {
-                    rowData.Amount = rowData.AmountInUsd = Math.Round(rowData.AmountInUsd + period.AmountInUsd, 15);
-                    return rowData;
-                });
+                    await _tableStorage.MergeAsync(period.PartitionKey, period.RowKey, rowData =>
+                    {
+                        rowData.AmountInUsd = Math.Round(rowData.AmountInUsd + period.AmountInUsd, 15);
+                        return rowData;
+                    });
+                }
             }
         }
+
 
         public string GeneratePeriodKey(IAccumulatedDepositPeriod period)
         {

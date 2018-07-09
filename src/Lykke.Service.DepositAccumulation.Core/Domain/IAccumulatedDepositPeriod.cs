@@ -10,7 +10,7 @@ namespace Lykke.Service.DepositAccumulation.Core.Domain
 
         string ClientId { get; set; }
         string AssetId { get; set; }
-        double Amount { get; set; }
+        double? Amount { get; set; }
         double AmountInUsd { get; set; }
     }
 }
